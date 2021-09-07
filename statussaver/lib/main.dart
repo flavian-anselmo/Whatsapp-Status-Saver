@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:statussaver/screens/image.dart';
 import 'package:statussaver/screens/splash.dart';
 import 'package:statussaver/screens/videos.dart';
 
 void main() {
+  //the root to the application 
   runApp(MyApp());
 }
 
@@ -20,7 +22,8 @@ class MyApp extends StatelessWidget {
       routes: {
         //this is the list of screens
         VideosFromStorage.id: (context) => VideosFromStorage(),
-        SplashScreen.id:(context)=>SplashScreen()
+        SplashScreen.id:(context)=>SplashScreen(),
+        ImageScreen.id:(context)=>ImageScreen(),
       },
     );
   }
