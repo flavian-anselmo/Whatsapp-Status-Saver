@@ -11,11 +11,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Status Saver ',
       theme: ThemeData(
-   
         primarySwatch: Colors.green,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
 }
-
