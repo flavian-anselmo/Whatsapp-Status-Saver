@@ -11,6 +11,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      //this is the splash screen of the app 
       body: Container(),
     );
   }

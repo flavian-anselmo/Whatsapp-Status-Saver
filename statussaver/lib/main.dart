@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
         //this is the list of screens
         VideosFromStorage.id: (context) => VideosFromStorage(),
         SplashScreen.id:(context)=>SplashScreen(),
-        ImageScreen.id:(context)=>ImageScreen(),
+        ImageScreen.id:(context)=>ImageScreen()
       },
     );
   }

@@ -9,10 +9,19 @@ class ImageScreen extends StatefulWidget {
 }
 
 class _ImageScreenState extends State<ImageScreen> {
+
+
+
+  
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: null,
+    return Scaffold(
+      body: Container(
+        child: Center(
+          //display the images for the application
+          child: Text('Display the status images '),
+        ),
+      ),
     );
   }
 }
