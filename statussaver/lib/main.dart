@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:statussaver/screens/image.dart';
+import 'package:statussaver/screens/navigation.dart';
 import 'package:statussaver/screens/splash.dart';
 import 'package:statussaver/screens/videos.dart';
 
@@ -18,9 +19,10 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.green,
       ),
-      initialRoute: ImageScreen.id,
+      initialRoute: NavigationToScreens.id,
       routes: {
         //this is the list of screens
+        NavigationToScreens.id:(context)=>NavigationToScreens(),
         VideosFromStorage.id: (context) => VideosFromStorage(),
         SplashScreen.id:(context)=>SplashScreen(),
         ImageScreen.id:(context)=>ImageScreen()
