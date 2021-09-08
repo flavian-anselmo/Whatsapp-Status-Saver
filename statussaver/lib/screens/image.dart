@@ -24,9 +24,9 @@ class _ImageScreenState extends State<ImageScreen> {
     try {
       await Provider.of<StoragePermission>(context, listen: false)
           .getStoragePermission();
-      if (await checkStorage.permissiongGranted) {
+      if (await checkStorage.permissiongGranted==true) {
         print('permission successful');
-      } else if (!await checkStorage.permissiongGranted) {
+      } else if (await checkStorage.permissiongGranted==false) {
         print('permissionfailed');
       }
     } catch (e) {
