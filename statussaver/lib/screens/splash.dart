@@ -7,12 +7,12 @@ class SplashScreen extends StatefulWidget {
   @override
   _SplashScreenState createState() => _SplashScreenState();
 }
+
 class _SplashScreenState extends State<SplashScreen> {
+  //this is the controller for the bootom bar
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      //this is the splash screen of the app 
-      body: Container(),
-    );
+    return Container();
   }
 }

@@ -7,9 +7,11 @@ class VideosFromStorage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        //display the location of videos in the applications 
-        child: Text('Display the location of the videos'),
+      body: SafeArea(
+        child: Container(
+          //display the location of videos in the applications 
+          child: Text('Display the location of the videos'),
+        ),
       ),
     );
   }

@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.green,
       ),
-      initialRoute: SplashScreen.id,
+      initialRoute: ImageScreen.id,
       routes: {
         //this is the list of screens
         VideosFromStorage.id: (context) => VideosFromStorage(),
