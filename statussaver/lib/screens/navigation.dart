@@ -13,6 +13,8 @@ class _NavigationToScreensState extends State<NavigationToScreens> {
   int _selectedIdx = 0; //the selected screen
 
   final screens = [
+    //this is the list of screens 
+    //both to display the videos and the images 
     ImageScreen(),
     VideosFromStorage(),
   ];
@@ -46,3 +48,11 @@ class _NavigationToScreensState extends State<NavigationToScreens> {
     );
   }
 }
+/**
+ * 
+ * 
+ * this is the navigation bar for the application 
+ * this alows the user to switch the screens 
+ * with the bottom navigation bar provided by the 
+ * widget bottom navigation bar 
+ */
