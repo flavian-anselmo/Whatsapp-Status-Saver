@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:statussaver/services/permission.dart';
@@ -13,6 +14,10 @@ class ImageScreen extends StatefulWidget {
 class _ImageScreenState extends State<ImageScreen> {
   //storage check instance
   StoragePermission checkStorage = StoragePermission();
+
+  //String path = 'storage/emulated/0/whatsapp/Media/.Statuses/';
+  var dir = Directory('storage/emulated/0/whatsapp/Media/.Statuses/');
+
   @override
   void initState() {
     //check the population
@@ -24,9 +29,9 @@ class _ImageScreenState extends State<ImageScreen> {
     try {
       await Provider.of<StoragePermission>(context, listen: false)
           .getStoragePermission();
-      if (await checkStorage.permissiongGranted==true) {
+      if (await checkStorage.permissiongGranted == true) {
         print('permission successful');
-      } else if (await checkStorage.permissiongGranted==false) {
+      } else if (await checkStorage.permissiongGranted == false) {
         print('permissionfailed');
       }
     } catch (e) {
@@ -36,7 +41,32 @@ class _ImageScreenState extends State<ImageScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(child: Center(child: Text('Display images from path')));
+    //chek if the dir exists in order to display the content
+    if (!Directory('${dir.path}').existsSync()) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text('Insall Whats app'),
+            Text('Your Friends Data will Be Available Here'),
+          ],
+        ),
+      );
+    } else {
+      final imageList = dir
+          .listSync()
+          .map((e) => e.path)
+          .where((element) => element.endsWith('.jpg'));
+      if (imageList.length > 0) {
+        return ListView.builder(
+          itemCount: imageList.length,
+          itemBuilder: (BuildContext context, int index) {
+            final path = imageList[index];
+            return Container(Text(path));
+          },
+        );
+      }
+    }
   }
 }
 
