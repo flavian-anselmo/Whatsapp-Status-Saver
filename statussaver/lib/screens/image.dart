@@ -46,10 +46,10 @@ class _ImageScreenState extends State<ImageScreen> {
   Future<void> fetchImagesFromDir() async {
     try {
       //use provider to change the state of the app
-      imageList=await Provider.of<ImageStorage>(context, listen: false).getListOfImages();
+      imageList = await Provider.of<ImageStorage>(context, listen: false)
+          .getListOfImages();
       //imageList=await Provider.of<ImageStorage>(context,listen: false).imageList;
-      isLoading=true;
-
+      isLoading = true;
     } catch (e) {
       print(e);
       print('error::failed to fetch the images ');
@@ -68,15 +68,14 @@ class _ImageScreenState extends State<ImageScreen> {
     //chek if the dir exists in order to display the content
     return SafeArea(
       child: Scaffold(
-        body: isLoading==true?ListView.builder(
-          itemCount: imageList.length,
-          itemBuilder: (BuildContext context, int index) {
-            return Card(
-              child: Text('$index'),
-            );
-          },
-        ):Center(child: CircularProgressIndicator())
-      ),
+          body: isLoading == true
+              ? ListView.builder(
+                  itemCount: imageList.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return Image.file(File(imageList[index]));
+                  },
+                )
+              : Center(child: CircularProgressIndicator())),
     );
   }
 }
