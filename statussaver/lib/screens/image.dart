@@ -50,6 +50,7 @@ class _ImageScreenState extends State<ImageScreen> {
           .getListOfImages();
       //imageList=await Provider.of<ImageStorage>(context,listen: false).imageList;
       setState(() {
+        //allow us to view the images
         isLoading = true;
       });
     } catch (e) {
@@ -71,7 +72,11 @@ class _ImageScreenState extends State<ImageScreen> {
     return SafeArea(
       child: Scaffold(
           body: isLoading == true
-              ? ListView.builder(
+              ? GridView.builder(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 4.0,
+                      mainAxisSpacing: 4.0),
                   itemCount: imageList.length,
                   itemBuilder: (BuildContext context, int index) {
                     return Image.file(File(imageList[index]));
