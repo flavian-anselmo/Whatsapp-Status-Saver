@@ -49,7 +49,9 @@ class _ImageScreenState extends State<ImageScreen> {
       imageList = await Provider.of<ImageStorage>(context, listen: false)
           .getListOfImages();
       //imageList=await Provider.of<ImageStorage>(context,listen: false).imageList;
-      isLoading = true;
+      setState(() {
+        isLoading = true;
+      });
     } catch (e) {
       print(e);
       print('error::failed to fetch the images ');
