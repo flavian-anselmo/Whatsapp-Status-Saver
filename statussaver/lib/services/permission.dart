@@ -5,6 +5,7 @@ class StoragePermission extends ChangeNotifier {
   bool permissiongGranted = false;
   Future getStoragePermission() async {
     try {
+      //if permission is granted 
       if (await Permission.storage.request().isGranted) {
         permissiongGranted = true;
         //notify that the value is true
@@ -17,6 +18,8 @@ class StoragePermission extends ChangeNotifier {
         print('storage permission denied ');
         notifyListeners();
       }
+
+      //exception handling 
     } catch (e) {
       print(e);
     }
@@ -26,4 +29,6 @@ class StoragePermission extends ChangeNotifier {
  * this will handle is the mobile applicatio n 
  * has allowed the device to access the  internal
  * mwmory of it 
+ * 
+ * this class is using provider for state management 
  */

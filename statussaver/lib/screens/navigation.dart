@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:statussaver/screens/image.dart';
 import 'package:statussaver/screens/videos.dart';
+import 'package:statussaver/services/fetchImage.dart';
 import 'package:statussaver/services/permission.dart';
 
 class NavigationToScreens extends StatefulWidget {
@@ -32,9 +33,13 @@ class _NavigationToScreensState extends State<NavigationToScreens> {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        //raising state for the storage permission 
+        //raising state for the storage permission
         ChangeNotifierProvider.value(
           value: StoragePermission(),
+        ),
+        //raise state for fetching images
+        ChangeNotifierProvider.value(
+          value: ImageStorage(),
         ),
       ],
       child: Scaffold(

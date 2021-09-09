@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:statussaver/services/fetchImage.dart';
 import 'package:statussaver/services/permission.dart';
 
 class ImageScreen extends StatefulWidget {
@@ -14,14 +15,17 @@ class ImageScreen extends StatefulWidget {
 class _ImageScreenState extends State<ImageScreen> {
   //storage check instance
   StoragePermission checkStorage = StoragePermission();
+  ImageStorage imageStore = ImageStorage();
 
   //String path = 'storage/emulated/0/whatsapp/Media/.Statuses/';
   var dir = Directory('storage/emulated/0/whatsapp/Media/.Statuses/');
+  var imageList;
+  bool isLoading = false;
 
   @override
   void initState() {
-    //check the population
-    checkStoragePermission();
+    //make sure the data is fetched form the db
+    fetchData();
     super.initState();
   }
 
@@ -39,34 +43,41 @@ class _ImageScreenState extends State<ImageScreen> {
     }
   }
 
+  Future<void> fetchImagesFromDir() async {
+    try {
+      //use provider to change the state of the app
+      imageList=await Provider.of<ImageStorage>(context, listen: false).getListOfImages();
+      //imageList=await Provider.of<ImageStorage>(context,listen: false).imageList;
+      isLoading=true;
+
+    } catch (e) {
+      print(e);
+      print('error::failed to fetch the images ');
+    }
+  }
+
+  //fetch evrything needed
+  Future<void> fetchData() async {
+    await checkStoragePermission();
+    await fetchImagesFromDir();
+    //isLoading = true;
+  }
+
   @override
   Widget build(BuildContext context) {
     //chek if the dir exists in order to display the content
-    if (!Directory('${dir.path}').existsSync()) {
-      return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text('Insall Whats app'),
-            Text('Your Friends Data will Be Available Here'),
-          ],
-        ),
-      );
-    } else {
-      final imageList = dir
-          .listSync()
-          .map((e) => e.path)
-          .where((element) => element.endsWith('.jpg'));
-      if (imageList.length > 0) {
-        return ListView.builder(
+    return SafeArea(
+      child: Scaffold(
+        body: isLoading==true?ListView.builder(
           itemCount: imageList.length,
           itemBuilder: (BuildContext context, int index) {
-            final path = imageList[index];
-            return Container(Text(path));
+            return Card(
+              child: Text('$index'),
+            );
           },
-        );
-      }
-    }
+        ):Center(child: CircularProgressIndicator())
+      ),
+    );
   }
 }
 
