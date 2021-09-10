@@ -1,13 +1,19 @@
+
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 class ViewSpecificImage extends StatelessWidget {
-  const ViewSpecificImage({Key? key}) : super(key: key);
+  ViewSpecificImage({this.image_path});
+  final image_path;
   static const String id = 'view-specific-image';
-
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: null,
+    return Scaffold(
+      body: SafeArea(
+        //pick the image path and display 
+        child: Image.file(File(image_path))
+      ),
     );
   }
 }
