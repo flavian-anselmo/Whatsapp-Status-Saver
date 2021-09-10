@@ -61,6 +61,7 @@ class _ImageScreenState extends State<ImageScreen> {
 
   //fetch evrything needed
   Future<void> fetchData() async {
+    //fetching all pics from the folders 
     await checkStoragePermission();
     await fetchImagesFromDir();
     //isLoading = true;
