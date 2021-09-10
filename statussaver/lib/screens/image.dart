@@ -61,7 +61,7 @@ class _ImageScreenState extends State<ImageScreen> {
 
   //fetch evrything needed
   Future<void> fetchData() async {
-    //fetching all pics from the folders 
+    //fetching all pics from the folders
     await checkStoragePermission();
     await fetchImagesFromDir();
     //isLoading = true;
@@ -72,22 +72,32 @@ class _ImageScreenState extends State<ImageScreen> {
     //chek if the dir exists in order to display the content
     return SafeArea(
       child: Scaffold(
-          body: isLoading == true
-              ? GridView.builder(
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      crossAxisSpacing: 4.0,
-                      mainAxisSpacing: 4.0),
-                  itemCount: imageList.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return Image.file(File(imageList[index]));
-                  },
-                )
-              : Center(child: CircularProgressIndicator())),
+        body: isLoading == true
+            ? GridView.builder(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 4.0,
+                    mainAxisSpacing: 4.0),
+                itemCount: imageList.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return GestureDetector(
+                    onTap: (){
+                      //view the image and allow sharing and downloading 
+                      //pass the link and move the image to the next screen 
+                    },
+                    child: Image.file(
+                      File(imageList[index]),
+                    ),
+                  );
+                },
+              )
+            : Center(
+                child: CircularProgressIndicator(),
+              ),
+      ),
     );
   }
 }
-
 /**
  * this is the place we shall place the images for the application 
  * the user will be able to view the images tha are present in the location
