@@ -7,6 +7,11 @@ class ViewSpecificImage extends StatelessWidget {
   ViewSpecificImage({this.image_path});
   final image_path;
   static const String id = 'view-specific-image';
+
+  Future<void>shareImage()async{
+    await 
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,8 +26,18 @@ class ViewSpecificImage extends StatelessWidget {
       ),
       floatingActionButton: FabCircularMenu(
         children: <Widget>[
-          IconButton(onPressed: () {}, icon: Icon(Icons.share)),
-          IconButton(onPressed: () {}, icon: Icon(Icons.download)),
+          IconButton(
+            onPressed: () {
+              //allow sharing of the image 
+            },
+            icon: Icon(Icons.share),
+          ),
+          IconButton(
+            onPressed: () {
+              //allow downloading the image 
+            },
+            icon: Icon(Icons.download),
+          ),
           //IconButton(onPressed: () {}, icon: Icon(Icons.)),
         ],
       ),
