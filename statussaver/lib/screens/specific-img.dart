@@ -1,6 +1,6 @@
-
 import 'dart:io';
 
+import 'package:fab_circular_menu/fab_circular_menu.dart';
 import 'package:flutter/material.dart';
 
 class ViewSpecificImage extends StatelessWidget {
@@ -10,9 +10,21 @@ class ViewSpecificImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.black,
       body: SafeArea(
-        //pick the image path and display 
-        child: Image.file(File(image_path))
+        //pick the image path and display
+        child: Container(
+          child: Image.file(
+            File(image_path),
+          ),
+        ),
+      ),
+      floatingActionButton: FabCircularMenu(
+        children: <Widget>[
+          IconButton(onPressed: () {}, icon: Icon(Icons.share)),
+          IconButton(onPressed: () {}, icon: Icon(Icons.download)),
+          //IconButton(onPressed: () {}, icon: Icon(Icons.)),
+        ],
       ),
     );
   }

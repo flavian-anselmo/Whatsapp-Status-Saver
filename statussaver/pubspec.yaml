@@ -31,6 +31,7 @@ dependencies:
   provider: ^6.0.0
   permission_handler: ^8.1.4+2
   path_provider: ^2.0.3
+  fab_circular_menu: ^1.0.2
 
 
 dev_dependencies:
