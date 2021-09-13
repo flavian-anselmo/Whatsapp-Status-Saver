@@ -2,11 +2,14 @@ import 'dart:io';
 
 import 'package:fab_circular_menu/fab_circular_menu.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:statussaver/services/imgdownload.dart';
 import 'package:statussaver/services/shareImage.dart';
 
+// ignore: must_be_immutable
 class ViewSpecificImage extends StatelessWidget {
   ViewSpecificImage({this.image_path});
-  final image_path;
+  var image_path;
   static const String id = 'view-specific-image';
 
   @override
@@ -33,6 +36,8 @@ class ViewSpecificImage extends StatelessWidget {
           IconButton(
             onPressed: () {
               //allow downloading the image
+              Provider.of<ImageDownload>(context, listen: false)
+                  .downLoadToGallery(image_path);
             },
             icon: Icon(Icons.download),
           ),
