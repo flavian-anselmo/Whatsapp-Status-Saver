@@ -6,9 +6,7 @@ class ImageDownload extends ChangeNotifier {
   Future<void> downLoadToGallery(var img_name) async {
     //allow the user to download the image to the gallery
     try {
-      var appDir = await getTemporaryDirectory();
-      var save_path = appDir.path + img_name;
-      await ImageGallerySaver.saveFile(save_path);
+      
       print('downloaded');
       notifyListeners();
     } catch (e) {

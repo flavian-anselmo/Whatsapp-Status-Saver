@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:statussaver/screens/specific-img.dart';
 import 'package:statussaver/services/fetchImage.dart';
+import 'package:statussaver/services/imgdownload.dart';
 import 'package:statussaver/services/permission.dart';
 
 class ImageScreen extends StatefulWidget {
@@ -81,25 +82,31 @@ class _ImageScreenState extends State<ImageScreen> {
                     mainAxisSpacing: 4.0),
                 itemCount: imageList.length,
                 itemBuilder: (BuildContext context, int index) {
-                  return GestureDetector(
-                    onTap: () {
-                      //view the image and allow sharing and downloading
-                      //pass the link and move the image to the next screen
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) {
-                            return ViewSpecificImage(
-                              //pass the image link to the next video
-                              image_path: imageList[index],
-                            );
-                          },
-                        ),
-                      );
-                    },
-                    
-                    child: Image.file(
-                      File(imageList[index]),
+                  return MultiProvider(
+                    providers: [
+                      ChangeNotifierProvider.value(
+                        value: ImageDownload(),
+                      )
+                    ],
+                    child: GestureDetector(
+                      onTap: () {
+                        //view the image and allow sharing and downloading
+                        //pass the link and move the image to the next screen
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return ViewSpecificImage(
+                                //pass the image link to the next video
+                                image_path: imageList[index],
+                              );
+                            },
+                          ),
+                        );
+                      },
+                      child: Image.file(
+                        File(imageList[index]),
+                      ),
                     ),
                   );
                 },
