@@ -4,8 +4,6 @@ import 'package:fab_circular_menu/fab_circular_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:provider/provider.dart';
-import 'package:statussaver/services/imgdownload.dart';
 import 'package:statussaver/services/shareImage.dart';
 
 // ignore: must_be_immutable

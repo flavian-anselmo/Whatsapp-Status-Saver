@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:statussaver/screens/image.dart';
 import 'package:statussaver/screens/videos.dart';
 import 'package:statussaver/services/fetchImage.dart';
-import 'package:statussaver/services/imgdownload.dart';
+import 'package:statussaver/services/fetchVideos.dart';
 import 'package:statussaver/services/permission.dart';
 
 class NavigationToScreens extends StatefulWidget {
@@ -42,7 +42,9 @@ class _NavigationToScreensState extends State<NavigationToScreens> {
         ChangeNotifierProvider.value(
           value: ImageStorage(),
         ),
-       
+        ChangeNotifierProvider.value(
+          value: VideoStorage(),
+        ),
       ],
       child: Scaffold(
         bottomNavigationBar: BottomNavigationBar(
