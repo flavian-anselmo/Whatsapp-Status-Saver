@@ -19,15 +19,37 @@ class _VideosFromStorageState extends State<VideosFromStorage> {
   late VideoPlayerController controller; //controller for the videos
   late Future<void> initilizeVideoPlayerFuture;
   late File file;
+  bool isloading3 = false;
 
   @override
   void initState() {
     //provide permission and list the videos
     fetchData();
     if (isLoading2 == true && isLoading == true) {
-      controller = VideoPlayerController.file(file);
+      for (int i = 0; videoList.length >= 0; i++) {
+        setState(() {
+          file = File(videoList[i]);
+         
+          controller = VideoPlayerController.file(file);
+        });
+
+      }
+       isloading3 = true;
+
+      setState(() {
+        initilizeVideoPlayerFuture = controller.initialize();
+      });
+    } else {
+      print('error::fetching videos ');
     }
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+    //this allows the realse of memory usage in the application
   }
 
   late bool isLoading = false;
@@ -64,10 +86,8 @@ class _VideosFromStorageState extends State<VideosFromStorage> {
             .getListOfVideos();
         setState(() {
           isLoading2 = true;
-          //file = File(videoList);
           print(videoList);
           print('fetched weell');
-          //print(file);
         });
       } else {
         print('permission to dir was denied ');
@@ -88,7 +108,7 @@ class _VideosFromStorageState extends State<VideosFromStorage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-          body: isLoading2
+          body: isLoading2 && isloading3==true
               ? GridView.builder(
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
@@ -97,8 +117,9 @@ class _VideosFromStorageState extends State<VideosFromStorage> {
                   ),
                   itemCount: videoList.length,
                   itemBuilder: (BuildContext contenxt, int index) {
-                    return Card(
-                      child: Text('data'),
+                    return AspectRatio(
+                      aspectRatio: controller.value.aspectRatio,
+                      child: VideoPlayer(controller),
                     );
                   },
                 )
