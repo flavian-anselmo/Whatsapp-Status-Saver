@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:statussaver/services/permission.dart';
 import 'package:statussaver/services/fetchVideos.dart';
+import 'package:video_player/video_player.dart';
 
 class VideosFromStorage extends StatefulWidget {
   const VideosFromStorage({Key? key}) : super(key: key);
@@ -13,16 +16,23 @@ class VideosFromStorage extends StatefulWidget {
 }
 
 class _VideosFromStorageState extends State<VideosFromStorage> {
+  late VideoPlayerController controller; //controller for the videos
+  late Future<void> initilizeVideoPlayerFuture;
+  late File file;
+
   @override
   void initState() {
     //provide permission and list the videos
     fetchData();
+    if (isLoading2 == true && isLoading == true) {
+      controller = VideoPlayerController.file(file);
+    }
     super.initState();
   }
 
   late bool isLoading = false;
   late bool isLoading2 = false;
-  var videoList;
+  late List<dynamic> videoList;
 
   //check the permission to fetch videos form the hidden status file
   Future<void> checkStoragePermission() async {
@@ -52,13 +62,13 @@ class _VideosFromStorageState extends State<VideosFromStorage> {
       if (isLoading == true) {
         videoList = await Provider.of<VideoStorage>(context, listen: false)
             .getListOfVideos();
-        if (videoList != null) {
-          //set the isloading value to true
-          setState(() {
-            isLoading2 = true;
-            print('fetched weell');
-          });
-        }
+        setState(() {
+          isLoading2 = true;
+          //file = File(videoList);
+          //print(videoList);
+          print('fetched weell');
+          //print(file);
+        });
       } else {
         print('permission to dir was denied ');
       }

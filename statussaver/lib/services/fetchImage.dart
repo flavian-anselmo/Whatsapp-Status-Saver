@@ -11,7 +11,9 @@ class ImageStorage extends ChangeNotifier {
       imageList = dir
           .listSync()
           .map((e) => e.path)
-          .where((element) => element.endsWith('.jpg'))
+          .where(
+            (element) => element.endsWith('.jpg'),
+          )
           .toList();
       //notify the change using provider
       //iam currently fetchong jpg files

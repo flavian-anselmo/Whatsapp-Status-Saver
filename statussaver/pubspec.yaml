@@ -34,6 +34,7 @@ dependencies:
   fab_circular_menu: ^1.0.2
   share_plus: ^2.1.4
   image_gallery_saver: ^1.6.9
+  video_player: ^2.2.0
 
 
 dev_dependencies:
