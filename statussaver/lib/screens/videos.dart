@@ -1,10 +1,8 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:statussaver/services/permission.dart';
 import 'package:statussaver/services/fetchVideos.dart';
-import 'package:video_player/video_player.dart';
+import 'package:video_thumbnail/video_thumbnail.dart';
 
 class VideosFromStorage extends StatefulWidget {
   const VideosFromStorage({Key? key}) : super(key: key);
@@ -16,45 +14,19 @@ class VideosFromStorage extends StatefulWidget {
 }
 
 class _VideosFromStorageState extends State<VideosFromStorage> {
-  late VideoPlayerController controller; //controller for the videos
-  late Future<void> initilizeVideoPlayerFuture;
-  late File file;
   bool isloading3 = false;
+  late bool isLoading = false;
+  late bool isLoading2 = false;
+  bool isgetThumb = false;
+  late List<dynamic> videoList;
 
   @override
   void initState() {
     //provide permission and list the videos
     fetchData();
-    if (isLoading2 == true && isLoading == true) {
-      for (int i = 0; videoList.length >= 0; i++) {
-        setState(() {
-          file = File(videoList[i]);
-         
-          controller = VideoPlayerController.file(file);
-        });
 
-      }
-       isloading3 = true;
-
-      setState(() {
-        initilizeVideoPlayerFuture = controller.initialize();
-      });
-    } else {
-      print('error::fetching videos ');
-    }
     super.initState();
   }
-
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
-    //this allows the realse of memory usage in the application
-  }
-
-  late bool isLoading = false;
-  late bool isLoading2 = false;
-  late List<dynamic> videoList;
 
   //check the permission to fetch videos form the hidden status file
   Future<void> checkStoragePermission() async {
@@ -98,6 +70,25 @@ class _VideosFromStorageState extends State<VideosFromStorage> {
     }
   }
 
+  Future getThumbnail(videopathURL) async {
+    //fetch the thumb nail from the videos
+    var thumbnail;
+    await Provider.of<StoragePermission>(context, listen: false)
+        .getStoragePermission();
+    isgetThumb = true;
+    if (isgetThumb == true) {
+      thumbnail = await VideoThumbnail.thumbnailData(
+        video: videopathURL.path,
+        quality: 25,
+        imageFormat: ImageFormat.JPEG,
+        maxWidth: 128,
+      );
+    }
+
+    //print('thumbnailNKSDJVNSDIOVJNSDIIIIIIIIII');
+    return Image.memory(thumbnail!);
+  }
+
   Future<void> fetchData() async {
     //fetch the videos form the dir
     await checkStoragePermission();
@@ -108,7 +99,7 @@ class _VideosFromStorageState extends State<VideosFromStorage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-          body: isLoading2 && isloading3==true
+          body: isLoading2
               ? GridView.builder(
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
@@ -117,9 +108,25 @@ class _VideosFromStorageState extends State<VideosFromStorage> {
                   ),
                   itemCount: videoList.length,
                   itemBuilder: (BuildContext contenxt, int index) {
-                    return AspectRatio(
-                      aspectRatio: controller.value.aspectRatio,
-                      child: VideoPlayer(controller),
+                    return FutureBuilder(
+                      future: getThumbnail(videoList[index]),
+                      //initialData: InitialData,
+                      builder: (BuildContext context, AsyncSnapshot snapshot) {
+                        if (snapshot.connectionState == ConnectionState.done) {
+                          if (snapshot.hasData) {
+                            print('hasdata');
+                          } else {
+                            print('no data');
+                          }
+                          return Card(
+                            child: Text(videoList[index]),
+                          );
+                        } else {
+                          return Card(
+                            child: Text('no data'),
+                          );
+                        }
+                      },
                     );
                   },
                 )

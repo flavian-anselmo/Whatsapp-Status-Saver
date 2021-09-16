@@ -35,6 +35,7 @@ dependencies:
   share_plus: ^2.1.4
   image_gallery_saver: ^1.6.9
   video_player: ^2.2.0
+  video_thumbnail: ^0.4.3
 
 
 dev_dependencies:
