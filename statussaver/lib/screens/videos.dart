@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:statussaver/services/permission.dart';
 import 'package:statussaver/services/fetchVideos.dart';
+import 'package:video_player/video_player.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
 
 class VideosFromStorage extends StatefulWidget {
@@ -19,11 +22,13 @@ class _VideosFromStorageState extends State<VideosFromStorage> {
   late bool isLoading2 = false;
   bool isgetThumb = false;
   late List<dynamic> videoList;
+  late VideoPlayerController controller;
 
   @override
   void initState() {
     //provide permission and list the videos
     fetchData();
+    controller = VideoPlayerController.file(File(videoList.first));
 
     super.initState();
   }
@@ -70,23 +75,29 @@ class _VideosFromStorageState extends State<VideosFromStorage> {
     }
   }
 
-  Future getThumbnail(videopathURL) async {
+  Future<File> getThumbnail(videopathURL) async {
     //fetch the thumb nail from the videos
     var thumbnail;
-    await Provider.of<StoragePermission>(context, listen: false)
-        .getStoragePermission();
-    isgetThumb = true;
-    if (isgetThumb == true) {
-      thumbnail = await VideoThumbnail.thumbnailData(
-        video: videopathURL.path,
-        quality: 25,
-        imageFormat: ImageFormat.JPEG,
-        maxWidth: 128,
-      );
+
+    try {
+      await Provider.of<StoragePermission>(context, listen: false)
+          .getStoragePermission();
+      isgetThumb = true;
+      if (isgetThumb == true) {
+        thumbnail = await VideoThumbnail.thumbnailData(
+          video: videopathURL.path,
+          quality: 25,
+          imageFormat: ImageFormat.JPEG,
+          maxWidth: 128,
+        );
+      }
+    } catch (e) {
+      print(e);
+      print('error::no data in the snapshot ');
     }
 
     //print('thumbnailNKSDJVNSDIOVJNSDIIIIIIIIII');
-    return Image.memory(thumbnail!);
+    return thumbnail;
   }
 
   Future<void> fetchData() async {
