@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 import 'package:statussaver/services/permission.dart';
 import 'package:statussaver/services/fetchVideos.dart';
 import 'package:video_player/video_player.dart';
-import 'package:video_thumbnail/video_thumbnail.dart';
 
 class VideosFromStorage extends StatefulWidget {
   const VideosFromStorage({Key? key}) : super(key: key);
@@ -17,9 +16,9 @@ class VideosFromStorage extends StatefulWidget {
 }
 
 class _VideosFromStorageState extends State<VideosFromStorage> {
-  bool isloading3 = false;
-  late bool isLoading = false;
-  late bool isLoading2 = false;
+  bool isFecthedAll= false;
+  late bool isStoragePermission = false;
+  late bool isVideoFetched = false;
   bool isgetThumb = false;
   late List<dynamic> videoList;
   late VideoPlayerController controller;
@@ -41,10 +40,10 @@ class _VideosFromStorageState extends State<VideosFromStorage> {
 
       setState(() {
         //chage to true
-        isLoading = true;
+        isStoragePermission= true;
       });
 
-      if (isLoading == true) {
+      if (isStoragePermission == true) {
         print('permission granted ');
       } else {
         print('permission denied ');
@@ -58,11 +57,11 @@ class _VideosFromStorageState extends State<VideosFromStorage> {
   //aftert accessing the permission
   Future<void> fetchVideosFromDir() async {
     try {
-      if (isLoading == true) {
+      if (isStoragePermission == true) {
         videoList = await Provider.of<VideoStorage>(context, listen: false)
             .getListOfVideos();
         setState(() {
-          isLoading2 = true;
+          isVideoFetched = true;
           print(videoList);
           print('fetched weell');
         });
@@ -75,73 +74,19 @@ class _VideosFromStorageState extends State<VideosFromStorage> {
     }
   }
 
-  Future<File> getThumbnail(videopathURL) async {
-    //fetch the thumb nail from the videos
-    var thumbnail;
-
-    try {
-      await Provider.of<StoragePermission>(context, listen: false)
-          .getStoragePermission();
-      isgetThumb = true;
-      if (isgetThumb == true) {
-        thumbnail = await VideoThumbnail.thumbnailData(
-          video: videopathURL.path,
-          quality: 25,
-          imageFormat: ImageFormat.JPEG,
-          maxWidth: 128,
-        );
-      }
-    } catch (e) {
-      print(e);
-      print('error::no data in the snapshot ');
-    }
-
-    //print('thumbnailNKSDJVNSDIOVJNSDIIIIIIIIII');
-    return thumbnail;
-  }
-
   Future<void> fetchData() async {
     //fetch the videos form the dir
     await checkStoragePermission();
     await fetchVideosFromDir();
+    isFecthedAll = true;
   }
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-          body: isLoading2
-              ? GridView.builder(
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 4.0,
-                    mainAxisSpacing: 4.0,
-                  ),
-                  itemCount: videoList.length,
-                  itemBuilder: (BuildContext contenxt, int index) {
-                    return FutureBuilder(
-                      future: getThumbnail(videoList[index]),
-                      //initialData: InitialData,
-                      builder: (BuildContext context, AsyncSnapshot snapshot) {
-                        if (snapshot.connectionState == ConnectionState.done) {
-                          if (snapshot.hasData) {
-                            print('hasdata');
-                          } else {
-                            print('no data');
-                          }
-                          return Card(
-                            child: Text(videoList[index]),
-                          );
-                        } else {
-                          return Card(
-                            child: Text('no data'),
-                          );
-                        }
-                      },
-                    );
-                  },
-                )
-              : Center(child: CircularProgressIndicator())),
+        body: Container(),
+      ),
     );
   }
 }
