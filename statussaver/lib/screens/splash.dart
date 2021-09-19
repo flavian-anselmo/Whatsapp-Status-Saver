@@ -20,7 +20,7 @@ class _SplashScreenState extends State<SplashScreen> {
   //check the permission to fetch videos form the hidden status file
   @override
   void initState() {
-    //FETCH ALL the data before proceding t the app 
+    //FETCH ALL the data before proceding t the app
     fetchData();
     super.initState();
   }
@@ -85,27 +85,36 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white70,
+      backgroundColor: Colors.white,
       body: SafeArea(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'whatsapp status saver',
-              style: TextStyle(
-                color: Colors.green,
-                fontSize: 45,
-                fontWeight: FontWeight.w900,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text(
+                'status saver',
+                style: TextStyle(
+                  color: Colors.green,
+                  fontSize: 45,
+                  fontWeight: FontWeight.w900,
+                ),
               ),
-            ),
-            Center(
-              //check for internet connection and display somethidn else
-              child: SpinKitCubeGrid(
-                color: Colors.green,
-                size: 100.0,
+              Center(
+                //check for internet connection and display somethidn else
+                child: SpinKitCubeGrid(
+                  color: Colors.green,
+                  size: 100.0,
+                ),
               ),
-            ),
-          ],
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0, 100, 0,0),
+                child: Center(
+                  child: Text('built by Anselmo.Jr'),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
