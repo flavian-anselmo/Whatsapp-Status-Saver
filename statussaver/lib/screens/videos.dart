@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:statussaver/services/permission.dart';
@@ -20,7 +18,7 @@ class _VideosFromStorageState extends State<VideosFromStorage> {
   bool isStoragePermission = false;
   bool isVideoFetched = false;
   bool isgetThumb = false;
-  late List<dynamic> videoList;
+  late List<dynamic> videoList = [];
   late VideoPlayerController controller;
   List<VideoPlayerController> controllerList = [];
   late Future<void> initializeVideoPlayerFuture;
@@ -61,7 +59,7 @@ class _VideosFromStorageState extends State<VideosFromStorage> {
       if (isStoragePermission == true) {
         videoList = await Provider.of<VideoStorage>(context, listen: false)
             .getListOfVideos();
-        await checkStoragePermission();
+        //await checkStoragePermission();
         setState(() {
           isVideoFetched = true;
           if (isVideoFetched == true) {
@@ -101,7 +99,9 @@ class _VideosFromStorageState extends State<VideosFromStorage> {
     await checkStoragePermission();
     await fetchVideosFromDir();
     setState(() {
-      isFecthedAll = true;
+      if (videoList.length == controllerList.length) {
+        isFecthedAll = true;
+      }
     });
   }
 
@@ -120,13 +120,30 @@ class _VideosFromStorageState extends State<VideosFromStorage> {
         //initialData: InitialData,
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.connectionState == ConnectionState.done &&
-              videoList.length > 0) {
+              videoList.length > 0 &&
+              controllerList.length > 0 &&
+              isFecthedAll == true) {
             return ListView.builder(
               itemCount: videoList.length,
               itemBuilder: (BuildContext context, int index) {
-                return AspectRatio(
-                  aspectRatio: controller.value.aspectRatio,
-                  child: VideoPlayer(controllerList[index]),
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: AspectRatio(
+                    aspectRatio: controllerList[index].value.aspectRatio,
+                    child: InkWell(
+                      onTap: () {
+                        setState(() {
+                          if (controllerList[index].value.isPlaying) {
+                            controllerList[index].pause();
+                          } else {
+                            controllerList[index].play();
+                          }
+                        });
+                      },
+                      focusColor: Colors.greenAccent,
+                      child: VideoPlayer(controllerList[index]),
+                    ),
+                  ),
                 );
               },
             );
@@ -135,17 +152,6 @@ class _VideosFromStorageState extends State<VideosFromStorage> {
               child: CircularProgressIndicator(),
             );
           }
-        },
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          setState(() {
-            if (controller.value.isPlaying) {
-              controller.pause();
-            } else {
-              controller.play();
-            }
-          });
         },
       ),
     ));
