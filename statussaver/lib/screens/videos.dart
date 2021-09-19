@@ -16,18 +16,18 @@ class VideosFromStorage extends StatefulWidget {
 }
 
 class _VideosFromStorageState extends State<VideosFromStorage> {
-  bool isFecthedAll= false;
-  late bool isStoragePermission = false;
-  late bool isVideoFetched = false;
+  bool isFecthedAll = false;
+  bool isStoragePermission = false;
+  bool isVideoFetched = false;
   bool isgetThumb = false;
   late List<dynamic> videoList;
   late VideoPlayerController controller;
+  late Future<void> initializeVideoPlayerFuture;
 
   @override
   void initState() {
     //provide permission and list the videos
     fetchData();
-    controller = VideoPlayerController.file(File(videoList.first));
 
     super.initState();
   }
@@ -40,7 +40,7 @@ class _VideosFromStorageState extends State<VideosFromStorage> {
 
       setState(() {
         //chage to true
-        isStoragePermission= true;
+        isStoragePermission = true;
       });
 
       if (isStoragePermission == true) {
@@ -60,8 +60,25 @@ class _VideosFromStorageState extends State<VideosFromStorage> {
       if (isStoragePermission == true) {
         videoList = await Provider.of<VideoStorage>(context, listen: false)
             .getListOfVideos();
+        await checkStoragePermission();
         setState(() {
           isVideoFetched = true;
+          if (isVideoFetched == true) {
+            for (int index = 0; index < videoList.length; index++) {
+              controller = VideoPlayerController.contentUri(
+                Uri.parse(
+                  videoList[index],
+                ),
+              );
+            }
+            initializeVideoPlayerFuture = controller.initialize();
+
+            //controller.addListener(() {});
+            //controller.initialize().then((value) => controller.play());
+          } else {
+            print('not fetched well');
+          }
+
           print(videoList);
           print('fetched weell');
         });
@@ -78,15 +95,54 @@ class _VideosFromStorageState extends State<VideosFromStorage> {
     //fetch the videos form the dir
     await checkStoragePermission();
     await fetchVideosFromDir();
-    isFecthedAll = true;
+    setState(() {
+      isFecthedAll = true;
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    controller.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Scaffold(
-        body: Container(),
+        child: Scaffold(
+      body: FutureBuilder(
+        future: initializeVideoPlayerFuture,
+        //initialData: InitialData,
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          if (snapshot.connectionState == ConnectionState.done &&
+              videoList.length > 0) {
+            return ListView.builder(
+              itemCount: videoList.length,
+              itemBuilder: (BuildContext context, int index) {
+                return AspectRatio(
+                  aspectRatio: controller.value.aspectRatio,
+                  child: VideoPlayer(controller),
+                );
+              },
+            );
+          } else {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+        },
       ),
-    );
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          setState(() {
+            if (controller.value.isPlaying) {
+              controller.pause();
+            } else {
+              controller.play();
+            }
+          });
+        },
+      ),
+    ));
   }
 }
