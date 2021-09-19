@@ -22,6 +22,7 @@ class _VideosFromStorageState extends State<VideosFromStorage> {
   bool isgetThumb = false;
   late List<dynamic> videoList;
   late VideoPlayerController controller;
+  List<VideoPlayerController> controllerList = [];
   late Future<void> initializeVideoPlayerFuture;
 
   @override
@@ -70,8 +71,12 @@ class _VideosFromStorageState extends State<VideosFromStorage> {
                   videoList[index],
                 ),
               );
+              controllerList.add(controller);
+              initializeVideoPlayerFuture = controllerList[index].initialize();
+
+              print(
+                  'sjjsdnusnusdnvusdnvsduvvvgueNNHCBUBV$controllerList.length');
             }
-            initializeVideoPlayerFuture = controller.initialize();
 
             //controller.addListener(() {});
             //controller.initialize().then((value) => controller.play());
@@ -121,7 +126,7 @@ class _VideosFromStorageState extends State<VideosFromStorage> {
               itemBuilder: (BuildContext context, int index) {
                 return AspectRatio(
                   aspectRatio: controller.value.aspectRatio,
-                  child: VideoPlayer(controller),
+                  child: VideoPlayer(controllerList[index]),
                 );
               },
             );
