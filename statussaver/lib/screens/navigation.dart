@@ -7,8 +7,9 @@ import 'package:statussaver/services/fetchVideos.dart';
 import 'package:statussaver/services/permission.dart';
 
 class NavigationToScreens extends StatefulWidget {
-  NavigationToScreens({Key? key}) : super(key: key);
+  NavigationToScreens({this.videoList});
   static const String id = 'navigation';
+  final videoList;
   @override
   _NavigationToScreensState createState() => _NavigationToScreensState();
 }
@@ -16,6 +17,7 @@ class NavigationToScreens extends StatefulWidget {
 class _NavigationToScreensState extends State<NavigationToScreens> {
   int _selectedIdx = 0; //the selected screen
 
+  
   final screens = [
     //this is the list of screens
     //both to display the videos and the images
@@ -67,6 +69,8 @@ class _NavigationToScreensState extends State<NavigationToScreens> {
     );
   }
 }
+
+
 /**
  * 
  * 

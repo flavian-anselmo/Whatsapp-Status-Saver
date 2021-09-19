@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.green,
         ),
-        initialRoute: SplashScreen.id,
+        initialRoute: NavigationToScreens.id,
         routes: {
           //this is the list of screens
           ViewSpecificImage.id: (context) => ViewSpecificImage(),

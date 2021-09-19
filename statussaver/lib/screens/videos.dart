@@ -5,7 +5,8 @@ import 'package:statussaver/services/fetchVideos.dart';
 import 'package:video_player/video_player.dart';
 
 class VideosFromStorage extends StatefulWidget {
-  const VideosFromStorage({Key? key}) : super(key: key);
+  const VideosFromStorage({this.videoList});
+  final videoList;
   //id for the video screen
   static const String id = 'display-videos';
 
@@ -21,7 +22,7 @@ class _VideosFromStorageState extends State<VideosFromStorage> {
   late List<dynamic> videoList = [];
   late VideoPlayerController controller;
   List<VideoPlayerController> controllerList = [];
-  late Future<void> initializeVideoPlayerFuture;
+  Future<void>? initializeVideoPlayerFuture;
 
   @override
   void initState() {
@@ -119,32 +120,38 @@ class _VideosFromStorageState extends State<VideosFromStorage> {
         future: initializeVideoPlayerFuture,
         //initialData: InitialData,
         builder: (BuildContext context, AsyncSnapshot snapshot) {
-          if (snapshot.connectionState == ConnectionState.done &&
-              videoList.length > 0 &&
-              controllerList.length > 0 &&
-              isFecthedAll == true) {
+          if (snapshot.connectionState == ConnectionState.done) {
             return ListView.builder(
               itemCount: videoList.length,
               itemBuilder: (BuildContext context, int index) {
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: AspectRatio(
-                    aspectRatio: controllerList[index].value.aspectRatio,
-                    child: InkWell(
-                      onTap: () {
-                        setState(() {
-                          if (controllerList[index].value.isPlaying) {
-                            controllerList[index].pause();
-                          } else {
-                            controllerList[index].play();
-                          }
-                        });
-                      },
-                      focusColor: Colors.greenAccent,
-                      child: VideoPlayer(controllerList[index]),
+                if (videoList.length > 0 &&
+                    controllerList.length > 0 &&
+                    isFecthedAll == true &&
+                    initializeVideoPlayerFuture != null) {
+                  return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: AspectRatio(
+                      aspectRatio: controllerList[index].value.aspectRatio,
+                      child: InkWell(
+                        onTap: () {
+                          setState(() {
+                            if (controllerList[index].value.isPlaying) {
+                              controllerList[index].pause();
+                            } else {
+                              controllerList[index].play();
+                            }
+                          });
+                        },
+                        focusColor: Colors.greenAccent,
+                        child: VideoPlayer(controllerList[index]),
+                      ),
                     ),
-                  ),
-                );
+                  );
+                } else {
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
               },
             );
           } else {
