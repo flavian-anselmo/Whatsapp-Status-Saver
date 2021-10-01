@@ -17,9 +17,6 @@ class VideoStorage extends ChangeNotifier {
           )
           .toList();
       notifyListeners();
-      //print(videoList);
-      //l = videoList;
-      //print(l);
       return videoList;
     } catch (e) {
       print(e);
@@ -28,3 +25,9 @@ class VideoStorage extends ChangeNotifier {
     }
   }
 }
+/**
+ * this service here will fecch the videos 
+ * from the associated dir and store them 
+ * in a list if videos that will help me display the 
+ * videos 
+ */

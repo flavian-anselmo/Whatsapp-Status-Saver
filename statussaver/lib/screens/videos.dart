@@ -20,6 +20,7 @@ class _VideosFromStorageState extends State<VideosFromStorage> {
   bool isVideoFetched = false;
   bool isgetThumb = false;
   late final VideoPlayerController controller;
+  
   var videoList;
 
   @override
@@ -32,6 +33,7 @@ class _VideosFromStorageState extends State<VideosFromStorage> {
 
   //check the permission to fetch videos form the hidden status file
   Future<void> checkStoragePermission() async {
+    //get the permission from the device first then fetch the videos 
     try {
       await Provider.of<StoragePermission>(context, listen: false)
           .getStoragePermission();
@@ -54,6 +56,7 @@ class _VideosFromStorageState extends State<VideosFromStorage> {
   //get the videos form the directories
   //aftert accessing the permission
   Future<void> fetchVideosFromDir() async {
+    //fetch the videos from associated dir ..only if permission is granted 
     try {
       if (isStoragePermission == true) {
         videoList = await Provider.of<VideoStorage>(context, listen: false)
@@ -70,7 +73,7 @@ class _VideosFromStorageState extends State<VideosFromStorage> {
   }
 
   Future<void> fetchData() async {
-    //fetch the videos form the dir
+    //fetch the videos from the dir
     await checkStoragePermission();
     await fetchVideosFromDir();
   }
