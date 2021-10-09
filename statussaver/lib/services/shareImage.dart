@@ -1,8 +1,8 @@
 import 'package:share_plus/share_plus.dart';
 
 class ShareImage {
-  static Future<void> shareImage(List<String>img_path) async {
-    Share.shareFiles(img_path);
+  static Future<void> shareImage(List<String>imgPath) async {
+    Share.shareFiles(imgPath);
   }
 }
 /**

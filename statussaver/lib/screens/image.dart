@@ -35,9 +35,9 @@ class _ImageScreenState extends State<ImageScreen> {
     try {
       await Provider.of<StoragePermission>(context, listen: false)
           .getStoragePermission();
-      if (await checkStorage.permissiongGranted == true) {
+      if (checkStorage.permissiongGranted == true) {
         print('permission successful');
-      } else if (await checkStorage.permissiongGranted == false) {
+      } else if (checkStorage.permissiongGranted == false) {
         print('permissionfailed');
       }
     } catch (e) {
@@ -100,7 +100,7 @@ class _ImageScreenState extends State<ImageScreen> {
                             builder: (context) {
                               return ViewSpecificImage(
                                 //pass the image link to the next video
-                                image_path: imageList[index],
+                                imagePath: imageList[index],
                               );
                             },
                           ),

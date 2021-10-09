@@ -38,6 +38,8 @@ dependencies:
   flutter_spinkit: ^5.1.0
   chewie: ^1.2.2
   image_gallery_saver: ^1.7.0
+  better_player: ^0.0.76
+
 
 
 

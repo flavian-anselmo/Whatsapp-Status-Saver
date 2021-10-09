@@ -20,7 +20,7 @@ class _VideosFromStorageState extends State<VideosFromStorage> {
   bool isStoragePermission = false;
   bool isVideoFetched = false;
   bool isgetThumb = false;
-  late VideoPlayerController videocontroller;
+  var videocontroller;
   late ChewieController chewiecontroller;
   late Future<void> initializeVideoPlayerFuture;
 
@@ -29,7 +29,7 @@ class _VideosFromStorageState extends State<VideosFromStorage> {
   var videoList;
 
   //this are the lists that define the video display
-  List videoControllerList = [];
+  List<VideoPlayerController> videoControllerList = [];
   List chewieControllerList = [];
   List playerWidgetList = [];
 
@@ -74,7 +74,7 @@ class _VideosFromStorageState extends State<VideosFromStorage> {
         videoList = await Provider.of<VideoStorage>(context, listen: false)
             .getListOfVideos();
         //await checkStoragePermission();
-
+        print(videoList);
       } else {
         print('permission to dir was denied ');
       }
@@ -88,49 +88,48 @@ class _VideosFromStorageState extends State<VideosFromStorage> {
     await checkStoragePermission();
     setState(() {
       try {
-        for (int idx = 0; idx < videoList; idx++) {
-          //initialise a video controller with a video then add it to the
-          //list of controllers below
+        for (int index = 0; index < videoList.length; index++) {
           videocontroller = VideoPlayerController.contentUri(
-            Uri.parse(videoList[idx]),
+            Uri.parse(videoList[index]),
           );
-          //add a controller to the list
           videoControllerList.add(videocontroller);
         }
-        isFecthedAll = true;
+        //This is the lenghth of both the controllers and the video list
+        print(videoControllerList.length);
+        print(videoList.length);
+        if (videoControllerList.length == videoList.length) {
+          //setit to true to know that the contrllers anre ready
+          isFecthedAll = true;
+        }
       } catch (e) {
         print(e);
       }
     });
     try {
-      if (isFecthedAll==true) {
-        //check if the length are the same
+      if (isFecthedAll == true) {
         await videocontroller.initialize().whenComplete(() {
           //if th initialisation is over
           setState(() {
             for (int index = 0; index < videoControllerList.length; index++) {
-              //iterate the videoControllers to make a list of chewie controllers
-
-              //set the chewies with its config
+              //get the list of chewie controllers
               chewiecontroller = ChewieController(
                 videoPlayerController: videoControllerList[index],
                 autoPlay: false,
                 looping: false,
               );
-              //add a chewie controller to the list
+              //add chewie controllers to the list of chewie controllres
               chewieControllerList.add(chewiecontroller);
             }
-            if (videoControllerList.length == chewieControllerList.length) {
-              //set the widgets for display
-              for (int idx = 0; idx < chewieControllerList.length; idx++) {
-                //iterate as we fetch the controllers for display
-                playerWidget = Chewie(controller: chewieControllerList[idx]);
-                //add widgets to a list of widgets
-                playerWidgetList.add(playerWidget);
-              }
-            }
+            //get the liength of chewies
+            print(chewieControllerList.length);
 
-            //this is the widget that displays the videos
+            for (int index = 0; index < chewieControllerList.length; index++) {
+              //set the widgets with the chewie controllers in a list
+              playerWidget = Chewie(controller: chewieControllerList[index]);
+              playerWidgetList.add(playerWidget);
+            }
+            print(
+                "===================================${playerWidgetList.length}==========================");
           });
         });
       }
@@ -157,20 +156,20 @@ class _VideosFromStorageState extends State<VideosFromStorage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        body: AspectRatio(
-          aspectRatio: videocontroller.value.aspectRatio,
-          child: videocontroller.value.isInitialized
-              ? ListView.builder(
+          body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: AspectRatio(
+            aspectRatio: videocontroller.value.aspectRatio,
+            child: videocontroller.value.isInitialized && playerWidgetList.length==chewieControllerList.length
+                ? ListView.builder(
                   itemCount: playerWidgetList.length,
-                  itemBuilder: (BuildContext context, int index) {
+                  itemBuilder: (context, index) {
                     return playerWidgetList[index];
-                  },
-                )
-              : Center(
-                  child: CircularProgressIndicator(),
-                ),
-        ),
-      ),
+                  })
+                : Center(
+                    child: CircularProgressIndicator(),
+                  )),
+      )),
     );
   }
 }

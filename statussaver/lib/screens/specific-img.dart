@@ -8,8 +8,8 @@ import 'package:statussaver/services/shareImage.dart';
 
 // ignore: must_be_immutable
 class ViewSpecificImage extends StatefulWidget {
-  ViewSpecificImage({this.image_path});
-  var image_path;
+  ViewSpecificImage({this.imagePath});
+  var imagePath;
   static const String id = 'view-specific-image';
 
   @override
@@ -20,8 +20,8 @@ class _ViewSpecificImageState extends State<ViewSpecificImage> {
   Future<void> downLoadImg() async {
     try {
       var appDir = await getTemporaryDirectory();
-      var save_path = appDir.path + "image_path";
-      await ImageGallerySaver.saveFile(save_path);
+      var savePath = appDir.path + "image_path";
+      await ImageGallerySaver.saveFile(savePath);
       print('object fixed');
     } catch (e) {
       print('object');
@@ -36,7 +36,7 @@ class _ViewSpecificImageState extends State<ViewSpecificImage> {
         //pick the image path and display
         child: Container(
           child: Image.file(
-            File(widget.image_path),
+            File(widget.imagePath),
           ),
         ),
       ),
@@ -45,7 +45,7 @@ class _ViewSpecificImageState extends State<ViewSpecificImage> {
           IconButton(
             onPressed: () {
               //allow sharing of the image
-              ShareImage.shareImage([widget.image_path]);
+              ShareImage.shareImage([widget.imagePath]);
             },
             icon: Icon(Icons.share),
           ),

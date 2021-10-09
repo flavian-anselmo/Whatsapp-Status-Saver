@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
 
 class ImageDownload extends ChangeNotifier {
-  Future<void> downLoadToGallery(var img_name) async {
+  Future<void> downLoadToGallery(var imgName) async {
     //allow the user to download the image to the gallery
     try {
       
