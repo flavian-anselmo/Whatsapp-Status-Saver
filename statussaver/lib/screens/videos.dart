@@ -20,7 +20,7 @@ class _VideosFromStorageState extends State<VideosFromStorage> {
   bool isStoragePermission = false;
   bool isVideoFetched = false;
   bool isgetThumb = false;
-  var videocontroller;
+  late VideoPlayerController videocontroller;
   late ChewieController chewiecontroller;
   late Future<void> initializeVideoPlayerFuture;
 
@@ -30,7 +30,7 @@ class _VideosFromStorageState extends State<VideosFromStorage> {
 
   //this are the lists that define the video display
   List<VideoPlayerController> videoControllerList = [];
-  List chewieControllerList = [];
+  List <ChewieController>chewieControllerList = [];
   List playerWidgetList = [];
 
   @override
@@ -85,7 +85,7 @@ class _VideosFromStorageState extends State<VideosFromStorage> {
   }
 
   Future<void> videoInitializer() async {
-    await checkStoragePermission();
+    //await checkStoragePermission();
     setState(() {
       try {
         for (int index = 0; index < videoList.length; index++) {
@@ -123,13 +123,13 @@ class _VideosFromStorageState extends State<VideosFromStorage> {
             //get the liength of chewies
             print(chewieControllerList.length);
 
-            for (int index = 0; index < chewieControllerList.length; index++) {
-              //set the widgets with the chewie controllers in a list
-              playerWidget = Chewie(controller: chewieControllerList[index]);
-              playerWidgetList.add(playerWidget);
-            }
-            print(
-                "===================================${playerWidgetList.length}==========================");
+            // for (int index = 0; index < chewieControllerList.length; index++) {
+            //   //set the widgets with the chewie controllers in a list
+            //   playerWidget = Chewie(controller: chewieControllerList[index]);
+            //   playerWidgetList.add(playerWidget);
+            // }
+            // print(
+            //     "===================================${playerWidgetList.length}==========================");
           });
         });
       }
@@ -148,7 +148,7 @@ class _VideosFromStorageState extends State<VideosFromStorage> {
   void dispose() {
     //free up the memory
     videocontroller.dispose();
-    chewiecontroller.dispose();
+    //chewiecontroller.dispose();
     super.dispose();
   }
 
@@ -158,17 +158,22 @@ class _VideosFromStorageState extends State<VideosFromStorage> {
       child: Scaffold(
           body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: AspectRatio(
-            aspectRatio: videocontroller.value.aspectRatio,
-            child: videocontroller.value.isInitialized && playerWidgetList.length==chewieControllerList.length
-                ? ListView.builder(
-                  itemCount: playerWidgetList.length,
-                  itemBuilder: (context, index) {
-                    return playerWidgetList[index];
-                  })
-                : Center(
-                    child: CircularProgressIndicator(),
-                  )),
+        child: videocontroller.value.isInitialized && chewieControllerList.length == videoControllerList.length 
+            ? Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ListView.builder(
+                    itemCount: chewieControllerList.length,
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Chewie(
+                            controller: chewieControllerList[index]),
+                      );
+                    }),
+              )
+            : Center(
+                child: CircularProgressIndicator(),
+              ),
       )),
     );
   }
